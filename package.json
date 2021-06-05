@@ -1,5 +1,5 @@
 {
-  "name": "bam-function-plugin",
+  "name": "bam-utility-plugin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "watch": "rollup -w -c"
   },
   "main": "dist/index.js",
-  "description": "Bamboodiary Function Plugin.",
+  "description": "Bamboodiary Function Utility Plugin.",
   "keywords": [
     "bamboo",
     "bamboodiary"
