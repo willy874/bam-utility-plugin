@@ -1,12 +1,12 @@
 {
   "name": "bam-utility-plugin",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "rollup": "rollup -c",
     "watch": "rollup -w -c"
   },
-  "main": "dist/index.js",
+  "main": "dist",
   "description": "Bamboodiary Function Utility Plugin.",
   "keywords": [
     "bamboo",
