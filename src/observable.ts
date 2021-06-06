@@ -1,17 +1,33 @@
 class SubScriber {
-  steps: Array<() => Promise<unknown>>
-  err: (() => unknown) | undefined
+  public steps: Array<(data: unknown) => Promise<unknown>>
+  private err: ((data: unknown) => Promise<unknown>) | undefined
+  private end: (data: unknown) => Promise<unknown>
 
   constructor() {
     this.steps = []
+    this.end = async () => {
+      return
+    }
   }
 
-  next(callback: () => Promise<unknown>): void {
+  public getErrorCallback() {
+    return this.err
+  }
+
+  public async runCompleteCallback(data: unknown) {
+    return await this.end(data)
+  }
+
+  public next(callback: (data: unknown) => Promise<unknown>): void {
     this.steps.push(callback)
   }
 
-  error(callback: () => Promise<unknown>): void {
+  public error(callback: (data: unknown) => Promise<unknown>): void {
     this.err = callback
+  }
+
+  public complete(callback: (data: unknown) => Promise<unknown>): void {
+    this.complete = callback
   }
 }
 
@@ -25,7 +41,10 @@ export class Observable {
 
   run(): void {
     const steps: Array<(data: unknown) => Promise<unknown>> = this.subscriber.steps
-    const errorCallback: ((err: unknown) => void) | undefined = this.subscriber.err
+    steps.push(async (data: unknown) => {
+      return await this.subscriber.runCompleteCallback(data)
+    })
+    const errorCallback: ((err: unknown) => void) | undefined = this.subscriber.getErrorCallback()
     const action = (index = 0, data: unknown = undefined): void => {
       if (steps[index]) {
         const promise: Promise<unknown> = steps[index](data)
