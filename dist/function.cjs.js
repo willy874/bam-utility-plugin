@@ -90,7 +90,7 @@ class SubScriber {
         this.err = callback;
     }
     complete(callback) {
-        this.complete = callback;
+        this.end = callback;
     }
 }
 class Observable {

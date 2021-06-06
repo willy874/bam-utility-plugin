@@ -27,7 +27,7 @@ class SubScriber {
   }
 
   public complete(callback: (data: unknown) => Promise<unknown>): void {
-    this.complete = callback
+    this.end = callback
   }
 }
 
