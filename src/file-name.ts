@@ -1,3 +1,19 @@
+const getFile = (name: string) => {
+  const file = name.split('.')
+  if (file.length) {
+    file.splice(file.length - 1, 1)
+    return file.join('')
+  }
+  return name
+}
+const getExt = (name: string) => {
+  const file = name.split('.')
+  if (file.length) {
+    return file[file.length - 1]
+  }
+  return ''
+}
+
 /**
  * 大小寫與連接符無法混用，連接符的優先級比駝峰高
  */
@@ -8,18 +24,9 @@ export class FileName {
 
   constructor(name: string) {
     this.data = []
-    const type = /\./.test(name) ? 'file' : 'none'
-    const getExt = () => {
-      const file = name.split('.')
-      return file[file.length - 1]
-    }
-    const getFile = () => {
-      const file = name.split('.')
-      file.splice(file.length - 1, 1)
-      return file.join('')
-    }
-    this.ext = type === 'none' ? 'none' : getExt()
-    this.name = type === 'none' ? name : getFile()
+    const type = name.includes('.') ? 'file' : 'none'
+    this.name = type === 'none' ? name : getFile(name)
+    this.ext = type === 'none' ? 'none' : getExt(name)
     if (/[A-Z]/.test(this.name)) {
       const arr = this.name.split('')
       arr.forEach((s, i) => {
@@ -32,14 +39,7 @@ export class FileName {
           .filter((p) => p)
       })
     } else if (/\.|-|_|\s/.test(this.name)) {
-      const allow = ['.', '-', '_', '', '\r', '\t', '\n', '\f']
-      const arr = this.name.split('')
-      arr.forEach((s, i) => {
-        if (allow.includes(s)) {
-          arr[i] = '-'
-        }
-      })
-      this.data = arr.join('').split('-')
+      this.data = this.name.split(/\.|-|_|\s/)
     } else {
       this.data = [this.name]
     }
