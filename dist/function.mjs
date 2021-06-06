@@ -69,12 +69,24 @@ class FileName {
 class SubScriber {
     constructor() {
         this.steps = [];
+        this.end = async () => {
+            return;
+        };
+    }
+    getErrorCallback() {
+        return this.err;
+    }
+    async runCompleteCallback(data) {
+        return await this.end(data);
     }
     next(callback) {
         this.steps.push(callback);
     }
     error(callback) {
         this.err = callback;
+    }
+    complete(callback) {
+        this.complete = callback;
     }
 }
 class Observable {
@@ -84,7 +96,10 @@ class Observable {
     }
     run() {
         const steps = this.subscriber.steps;
-        const errorCallback = this.subscriber.err;
+        steps.push(async (data) => {
+            return await this.subscriber.runCompleteCallback(data);
+        });
+        const errorCallback = this.subscriber.getErrorCallback();
         const action = (index = 0, data = undefined) => {
             if (steps[index]) {
                 const promise = steps[index](data);
