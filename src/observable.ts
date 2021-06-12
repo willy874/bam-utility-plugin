@@ -1,4 +1,4 @@
-class SubScriber {
+export class SubScriber {
   public steps: Array<(data: unknown) => Promise<unknown>>
   private err: ((data: unknown) => Promise<unknown>) | undefined
   private end: (data: unknown) => Promise<unknown>
@@ -10,11 +10,11 @@ class SubScriber {
     }
   }
 
-  public getErrorCallback() {
+  public getErrorCallback(): ((data: unknown) => Promise<unknown>) | undefined {
     return this.err
   }
 
-  public async runCompleteCallback(data: unknown) {
+  public async runCompleteCallback(data: unknown): Promise<unknown> {
     return await this.end(data)
   }
 
