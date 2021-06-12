@@ -2,7 +2,7 @@ const getFile = (name) => {
     const file = name.split('.');
     if (file.length) {
         file.splice(file.length - 1, 1);
-        return file.join('');
+        return file.join('.');
     }
     return name;
 };
@@ -21,7 +21,7 @@ class FileName {
         this.data = [];
         const type = name.includes('.') ? 'file' : 'none';
         this.name = type === 'none' ? name : getFile(name);
-        this.ext = type === 'none' ? 'none' : getExt(name);
+        this.ext = type === 'none' ? '' : getExt(name);
         if (/[A-Z]/.test(this.name)) {
             const arr = this.name.split('');
             arr.forEach((s, i) => {
@@ -147,9 +147,10 @@ const valueString = function (value, type = 'json') {
 
 var index = {
     FileName,
+    SubScriber,
     Observable,
     valueString,
 };
 
 export default index;
-export { FileName, Observable, valueString };
+export { FileName, Observable, SubScriber, valueString };
