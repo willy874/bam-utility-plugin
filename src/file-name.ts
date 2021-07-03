@@ -24,19 +24,21 @@ export class FileName {
 
   constructor(name: string) {
     this.data = []
-    const type = name.includes('.') ? 'file' : 'none'
+    const type: string = name.includes('.') ? 'file' : 'none'
     this.name = type === 'none' ? name : getFile(name)
     this.ext = type === 'none' ? '' : getExt(name)
     if (/[A-Z]/.test(this.name)) {
-      const arr = this.name.split('')
-      arr.forEach((s, i) => {
-        if (/[A-Z]/.test(s)) {
-          arr[i] = '-' + s.toLowerCase()
+      const arrIndex: Array<number> = this.name
+        .split('')
+        .map((s, i) => (/[A-Z]/.test(s) ? i : 0))
+        .filter((p) => p)
+      arrIndex.unshift(0)
+      this.data = arrIndex.map((num, index, arr) => {
+        const nextIndex: number = arr[index + 1]
+        if (nextIndex) {
+          return this.name.substring(num, nextIndex)
         }
-        this.data = arr
-          .join('')
-          .split('-')
-          .filter((p) => p)
+        return this.name.substring(num, arr.length)
       })
     } else if (/\.|-|_|\s/.test(this.name)) {
       this.data = this.name.split(/\.|-|_|\s/)
