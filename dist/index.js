@@ -27,15 +27,17 @@ class FileName {
         this.name = type === 'none' ? name : getFile(name);
         this.ext = type === 'none' ? '' : getExt(name);
         if (/[A-Z]/.test(this.name)) {
-            const arr = this.name.split('');
-            arr.forEach((s, i) => {
-                if (/[A-Z]/.test(s)) {
-                    arr[i] = '-' + s.toLowerCase();
+            const arrIndex = this.name
+                .split('')
+                .map((s, i) => (/[A-Z]/.test(s) ? i : 0))
+                .filter((p) => p);
+            arrIndex.unshift(0);
+            this.data = arrIndex.map((num, index, arr) => {
+                const nextIndex = arr[index + 1];
+                if (nextIndex) {
+                    return this.name.substring(num, nextIndex);
                 }
-                this.data = arr
-                    .join('')
-                    .split('-')
-                    .filter((p) => p);
+                return this.name.substring(num, arr.length);
             });
         }
         else if (/\.|-|_|\s/.test(this.name)) {
@@ -98,13 +100,13 @@ class Observable {
         this.subscriber = new SubScriber();
         init(this.subscriber);
     }
-    run() {
+    run(first) {
         const steps = this.subscriber.steps;
         steps.push(async (data) => {
             return await this.subscriber.runCompleteCallback(data);
         });
         const errorCallback = this.subscriber.getErrorCallback();
-        const action = (index = 0, data = undefined) => {
+        const action = (index = 0, data = first) => {
             if (steps[index]) {
                 const promise = steps[index](data);
                 promise
