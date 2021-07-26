@@ -39,24 +39,29 @@ export class Observable {
     init(this.subscriber)
   }
 
-  run(first: unknown): void {
-    const steps: Array<(data: unknown) => Promise<unknown>> = this.subscriber.steps
-    steps.push(async (data: unknown) => {
-      return await this.subscriber.runCompleteCallback(data)
-    })
-    const errorCallback: ((err: unknown) => void) | undefined = this.subscriber.getErrorCallback()
-    const action = (index = 0, data: unknown = first): void => {
-      if (steps[index]) {
-        const promise: Promise<unknown> = steps[index](data)
-        promise
-          .then((res: unknown) => {
-            action(index + 1, res)
-          })
-          .catch((err: unknown) => {
-            if (errorCallback) errorCallback(err)
-          })
+  run(first: unknown): Promise<unknown> {
+    return new Promise((resolve: (data: unknown) => void, reject: (data: unknown) => void) => {
+      const steps: Array<(data: unknown) => Promise<unknown>> = this.subscriber.steps
+      steps.push(async (data: unknown) => {
+        const completResult: unknown = await this.subscriber.runCompleteCallback(data)
+        resolve(completResult)
+        return completResult
+      })
+      const errorCallback: ((err: unknown) => void) | undefined = this.subscriber.getErrorCallback()
+      const action = (index = 0, data: unknown = first): void => {
+        if (steps[index]) {
+          const promise: Promise<unknown> = steps[index](data)
+          promise
+            .then((res: unknown) => {
+              action(index + 1, res)
+            })
+            .catch((err: unknown) => {
+              if (errorCallback) errorCallback(err)
+              reject(err)
+            })
+        }
       }
-    }
-    action()
+      action()
+    })
   }
 }

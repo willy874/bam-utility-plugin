@@ -37,11 +37,12 @@ import { Observable } from 'bam-utility-plugins'
 
 const getIndexPlus = async (i) => i + 1
 
-const = observable = new Observable((subscriber) => {
-  const arr = Array(3).fill()
-  arr.forEach((data) => {
-    console.log('log', data)
-    return await getIndex(data)
+const observable = new Observable((subscriber) => {
+  ;[0, 0, 0].forEach(() => {
+    subscriber.next(async (data) => {
+      console.log('log', data)
+      return await getIndexPlus(data)
+    })
   })
   subscriber.error(() => {
     console.log('error')
