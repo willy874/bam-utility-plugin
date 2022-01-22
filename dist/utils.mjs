@@ -1,7 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 class FileName {
     constructor(name) {
         this.data = [];
@@ -403,32 +399,4 @@ function transformFileSize(value) {
     return NaN;
 }
 
-exports.FileName = FileName;
-exports.HttpError = HttpError;
-exports.Observable = Observable;
-exports.SubScriber = SubScriber;
-exports.blobToBase64 = blobToBase64;
-exports.clearDragImage = clearDragImage;
-exports.cloneJson = cloneJson;
-exports.formDataFormat = formDataFormat;
-exports.formUrlEncodedFormat = formUrlEncodedFormat;
-exports.getBoundingClientRect = getBoundingClientRect;
-exports.getTransformStyleString = getTransformStyleString;
-exports.getViewportOffset = getViewportOffset;
-exports.handleErrorLog = handleErrorLog;
-exports.handleHttpErrorLog = handleHttpErrorLog;
-exports.handleWarningLog = handleWarningLog;
-exports.isApp = isApp;
-exports.isArrayEmpty = isArrayEmpty;
-exports.isBlobEmpty = isBlobEmpty;
-exports.isClass = isClass;
-exports.isDarkMode = isDarkMode;
-exports.isEmpty = isEmpty;
-exports.isNumberEmpty = isNumberEmpty;
-exports.isObjectEmpty = isObjectEmpty;
-exports.isStringEmpty = isStringEmpty;
-exports.isTextExcludes = isTextExcludes;
-exports.isTextIncludes = isTextIncludes;
-exports.messageFormat = messageFormat;
-exports.transformFileSize = transformFileSize;
-exports.urlToImageElement = urlToImageElement;
+export { FileName, HttpError, Observable, SubScriber, blobToBase64, clearDragImage, cloneJson, formDataFormat, formUrlEncodedFormat, getBoundingClientRect, getTransformStyleString, getViewportOffset, handleErrorLog, handleHttpErrorLog, handleWarningLog, isApp, isArrayEmpty, isBlobEmpty, isClass, isDarkMode, isEmpty, isNumberEmpty, isObjectEmpty, isStringEmpty, isTextExcludes, isTextIncludes, messageFormat, transformFileSize, urlToImageElement };

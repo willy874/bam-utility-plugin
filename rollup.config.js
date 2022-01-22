@@ -2,12 +2,13 @@ import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import image from '@rollup/plugin-image'
 import typescript from 'rollup-plugin-typescript'
+import dts from "rollup-plugin-dts";
 
 const plugins = [
   image(),
   typescript(),
   resolve(),
-  commonjs()
+  commonjs(),
 ]
 const external = []
 
@@ -23,7 +24,7 @@ export default [{
   {
     input: 'src/index.ts',
     output: {
-      file: 'dist/function.mjs'
+      file: 'dist/utils.mjs'
     },
     plugins,
     external
@@ -31,10 +32,15 @@ export default [{
   {
     input: 'src/index.ts',
     output: {
-      file: 'dist/function.cjs.js',
+      file: 'dist/utils.cjs.js',
       format: 'cjs'
     },
     plugins,
     external
-  }
+  },
+  {
+    input: 'src/index.ts',
+    output: [{ file: "dist/types.d.ts", format: "es" }],
+    plugins: [dts()],
+  },
 ]

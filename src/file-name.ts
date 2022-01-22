@@ -1,73 +1,49 @@
-const getFile = (name: string) => {
-  const file = name.split('.')
-  if (file.length) {
-    file.splice(file.length - 1, 1)
-    return file.join('.')
-  }
-  return name
-}
-const getExt = (name: string) => {
-  const file = name.split('.')
-  if (file.length) {
-    return file[file.length - 1]
-  }
-  return ''
-}
-
-/**
- * 大小寫與連接符無法混用，連接符的優先級比駝峰高
- */
 export class FileName {
-  data: Array<string>
-  ext: string
-  name: string
+  readonly data: string[] = []
+  readonly ext: string
+  readonly name: string
 
   constructor(name: string) {
-    this.data = []
-    const type: string = name.includes('.') ? 'file' : 'none'
-    this.name = type === 'none' ? name : getFile(name)
-    this.ext = type === 'none' ? '' : getExt(name)
-    if (/[A-Z]/.test(this.name)) {
-      const arrIndex: Array<number> = this.name
-        .split('')
-        .map((s, i) => (/[A-Z]/.test(s) ? i : 0))
-        .filter((p) => p)
-      arrIndex.unshift(0)
-      this.data = arrIndex.map((num, index, arr) => {
-        const nextIndex: number = arr[index + 1]
-        if (nextIndex) {
-          return this.name.substring(num, nextIndex)
-        }
-        return this.name.substring(num, arr.length)
-      })
-    } else if (/\.|-|_|\s/.test(this.name)) {
-      this.data = this.name.split(/\.|-|_|\s/)
-    } else {
-      this.data = [this.name]
+    const last = name.lastIndexOf('.') 
+    this.ext = last >= 0 ? name.substring(last) : ''
+    this.name = name.replace(this.ext, '')
+    let index = 0
+    let isBlack = false
+    for (let i = 0; i < this.name.length; i++) {
+      const str = this.name[i]
+      if (i === 0) {
+        index = this.data.push(str)
+      } else if (/\.|-|_|\s/.test(str)) {
+        isBlack = true
+      } else if (isBlack) {
+        isBlack = false
+        index = this.data.push(str) 
+      } else if (/[A-Z]/.test(str)) {
+        index = this.data.push(str)
+      } else {
+        this.data[index - 1] += str
+      }
     }
   }
 
-  ConverBigHump(): string {
-    const arr: Array<string> = []
-    this.data.forEach((s) => {
-      if (s[0]) {
-        arr.push(s[0].toUpperCase() + s.substring(1))
-      }
-    })
-    return arr.join('')
+  transformUpperHump(): string {
+    return this.data.filter(s => s).map((s) => s[0].toUpperCase() + s.substring(1)).join('')
   }
 
-  ConverLittleHump(): string {
-    const arr: Array<string> = []
-    this.data.forEach((s) => {
-      if (s[0]) {
-        if (arr.length === 0) {
-          arr.push(s.toLowerCase())
-        } else {
-          arr.push(s[0].toUpperCase() + s.substring(1))
-        }
+  transformLowerHump(): string {
+    return this.data.filter(s => s).map((s, i) => {
+      if (i === 0) {
+       return s[0].toLowerCase() + s.substring(1) 
       }
-    })
-    return arr.join('')
+      return s[0].toUpperCase() + s.substring(1)
+    }).join('')
+  }
+
+  transformKebabCase(): string {
+    return this.data.join('-')
+  }
+
+  transformSnakeCase(): string {
+    return this.data.join('_')
   }
 }

@@ -1,28 +1,34 @@
 {
   "name": "bam-utility-plugins",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -w -c"
   },
-  "main": "dist",
-  "description": "Bamboodiary Function Utility Plugin.",
+  "main": "./dist",
+  "types": "./dist/types.d.ts",
+  "description": "Bamboo Function Utility Plugin.",
   "keywords": [
     "bamboo",
-    "bamboodiary"
+    "bamboo-utility",
+    "bamboo-utils",
+    "utils",
+    "utility"
   ],
   "author": "SJ",
   "dependencies": {},
   "devDependencies": {
+    "rollup-plugin-dts": "^4.1.0",
     "@rollup/plugin-alias": "^3.0.0",
     "@rollup/plugin-image": "^2.0.1",
     "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "eslint": "^6.7.2",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.0.4",
     "prettier": "^2.3.0",
     "prettier-eslint": "^12.0.0",
     "rollup-plugin-cleaner": "^1.0.0",
@@ -30,13 +36,6 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-ts": "^1.4.0",
     "rollup-plugin-typescript": "^1.0.1",
-    "jest": "^27.0.4",
     "typescript": "~4.1.5"
-  },
-  "eslintConfig": {},
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  }
 }
