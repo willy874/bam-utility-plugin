@@ -109,4 +109,43 @@ declare function blobToBase64(blob: Blob): Promise<string>;
 declare function urlToImageElement(url: string): Promise<HTMLImageElement>;
 declare function transformFileSize(value: unknown): number;
 
-export { DeviceInfoInfo, FileName, FormDataObject, FormDataValue, HttpError, JsonObject, JsonValue, Observable, SubScriber, TransformStyle, ViewportOffsetResult, blobToBase64, clearDragImage, cloneJson, formDataFormat, formUrlEncodedFormat, getBoundingClientRect, getTransformStyleString, getViewportOffset, handleErrorLog, handleHttpErrorLog, handleWarningLog, isApp, isArrayEmpty, isBlobEmpty, isClass, isDarkMode, isEmpty, isNumberEmpty, isObjectEmpty, isStringEmpty, isTextExcludes, isTextIncludes, messageFormat, transformFileSize, urlToImageElement };
+interface BaseValidateOption<M> {
+    message?: string;
+    messageOption?: Record<keyof M, string>;
+}
+declare type ValidateOption<V> = V & BaseValidateOption<V>;
+declare type StringResult = string | string[] | null;
+declare type ValidatorHandlerResult = Promise<StringResult> | StringResult;
+declare type ValidatorHandler = (value: unknown, option?: ValidateOption<never>) => ValidatorHandlerResult;
+interface ValidatorHandlerList {
+    [k: string]: ValidatorHandler;
+}
+declare type ValidateField<V> = {
+    [Type in keyof V]: ValidatorHandlerOption<V[Type]>;
+};
+declare type ValidatorValidOption<M, V> = {
+    [K in keyof M]?: ValidateField<V>;
+};
+declare type ValidatorHandlerOption<F> = F extends (value: unknown, option: infer A) => ValidatorHandlerResult ? A : never;
+interface ErrorMessages {
+    [key: string]: string[] | null;
+}
+declare class Validator<M> {
+    readonly validatorHandler: ValidatorHandlerList;
+    private readonly model;
+    private readonly validateOption?;
+    readonly errors: {
+        [K in keyof M]?: string[];
+    };
+    constructor(model: M, option?: ValidatorValidOption<M, ValidatorHandlerList>);
+    validate(options?: ValidatorValidOption<M, ValidatorHandlerList>): Promise<ErrorMessages>;
+    setValidatorHandler(name: string, handler: ValidatorHandler): void;
+    validateField(value: unknown, options?: ValidateField<ValidatorHandlerList>): Promise<string[] | null>;
+    errorsToArray(): string[];
+    getErrors(): {
+        [K in keyof M]?: string[];
+    };
+    isValid(field: keyof M): boolean;
+}
+
+export { DeviceInfoInfo, FileName, FormDataObject, FormDataValue, HttpError, JsonObject, JsonValue, Observable, SubScriber, TransformStyle, ValidateField, ValidateOption, Validator, ValidatorHandler, ValidatorHandlerOption, ValidatorValidOption, ViewportOffsetResult, blobToBase64, clearDragImage, cloneJson, formDataFormat, formUrlEncodedFormat, getBoundingClientRect, getTransformStyleString, getViewportOffset, handleErrorLog, handleHttpErrorLog, handleWarningLog, isApp, isArrayEmpty, isBlobEmpty, isClass, isDarkMode, isEmpty, isNumberEmpty, isObjectEmpty, isStringEmpty, isTextExcludes, isTextIncludes, messageFormat, transformFileSize, urlToImageElement };

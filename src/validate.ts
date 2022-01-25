@@ -168,7 +168,7 @@ interface ErrorMessages {
 export class Validator<M> {
   public readonly validatorHandler: ValidatorHandlerList = validatorHandler
   private readonly model: M
-  private readonly validateOption?: ValidatorValidOption<M,typeof this['validatorHandler']>
+  private readonly validateOption?: ValidatorValidOption<M,ValidatorHandlerList>
   public readonly errors: { [K in keyof M]?: string[] } = {}
 
   constructor (model: M, option?: ValidatorValidOption<M, ValidatorHandlerList>) {
@@ -176,7 +176,7 @@ export class Validator<M> {
     this.validateOption = option
   }
 
-  async validate(options?: ValidatorValidOption<M,typeof this['validatorHandler']>): Promise<ErrorMessages> {
+  async validate(options?: ValidatorValidOption<M,ValidatorHandlerList>): Promise<ErrorMessages> {
     if (isEmpty(this.model)) {
       handleWarningLog('utils[function validate]: The form property is all empty.')
     }
@@ -196,7 +196,11 @@ export class Validator<M> {
     return errors
   }
 
-  async validateField(value: unknown, options?: ValidateField<typeof this['validatorHandler']>): Promise<string[] | null> {
+  setValidatorHandler(name: string, handler: ValidatorHandler): void {
+    this.validatorHandler[name] = handler
+  }
+
+  async validateField(value: unknown, options?: ValidateField<ValidatorHandlerList>): Promise<string[] | null> {
     const errors: string[] = []
     if (options) {
       for (const type in options) {
@@ -220,6 +224,10 @@ export class Validator<M> {
 
   errorsToArray(): string[] {
     return Object.values(this.errors).flat().filter(p => p).map(String)
+  }
+
+  getErrors (): { [K in keyof M]?: string[] } {
+    return JSON.parse(JSON.stringify(this.errors))
   }
 
   isValid(field: keyof M): boolean {
