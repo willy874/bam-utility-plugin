@@ -8,6 +8,10 @@
   "main": "./dist",
   "types": "./dist/types.d.ts",
   "description": "Bamboo Function Utility Plugin.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/willy874/bam-utility-plugins.git"
+  },
   "keywords": [
     "bamboo",
     "bamboo-utility",
@@ -15,7 +19,7 @@
     "utils",
     "utility"
   ],
-  "author": "SJ",
+  "author": "willy",
   "dependencies": {},
   "devDependencies": {
     "rollup-plugin-dts": "^4.1.0",
