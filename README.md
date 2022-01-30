@@ -1,76 +1,45 @@
 # BAM UTILITY PLUGINS
 
-各種通用函式，所做的判斷與處理適用於 Browser 與 Nodejs。
+各種通用函式。
 
-## FileName
+## FileName (Browser | Nodejs)
+
+### Arguments
+
+- {string} constructorArg: 放入要格式化的字串。
+
+### Description
 
 處理關於 `名稱` 的字串處理。如果 path-browserify 無法滿足需求的時候，可以搭配該模組來進行大小駝峰的拆解轉換規則。
+
+### Example
 
 ```js
 import { FileName } from 'bam-utility-plugins'
 
 const filename1 = new FileName('bamboo.ex_str test.txt')
 
-console.log(filename1.ConverBigHump())
+console.log(filename1.transformUpperHump())
 // BambooExStrTest
-console.log(filename1.ConverLittleHump())
+console.log(filename1.transformLowerHump())
 // bambooExStrTest
-console.log(filename1.data.join('-'))
+console.log(filename1.transformKebabCase())
 // bamboo-ex-str-test
+console.log(filename1.data)
+// ['bamboo', 'ex' 'Ex', 'str', 'test']
+console.log(filename1.ext)
+// .txt
 
-const filename2 = new FileName('bambooExStrTest.txt')
+const filename2 = new FileName('bam booEx_str-Test.txt')
 
-console.log(filename2.ConverBigHump())
+console.log(filename2.transformUpperHump())
 // BambooExStrTest
-console.log(filename2.data.join('-'))
-// bamboo-Ex-Str-Test
-console.log(filename2.data.map((s) => s.toLowerCase()).join('-'))
-// bamboo-ex-str-test
-```
-
-## Observable & SubScriber
-
-用於處理連續非同步的事件。
-
-```js
-import { Observable } from 'bam-utility-plugins'
-
-const getIndexPlus = async (i) => i + 1
-
-const observable = new Observable((subscriber) => {
-  ;[0, 0, 0].forEach(() => {
-    subscriber.next(async (data) => {
-      console.log('log', data)
-      return await getIndexPlus(data)
-    })
-  })
-  subscriber.error(() => {
-    console.log('error')
-  })
-  subscriber.end((data) => {
-    console.log('end', data)
-  })
-})
-
-observable.run(0)
-
-// log 0
-// log 1
-// log 2
-// end 3
-```
-
-## valueString
-
-將值轉為字串。
-
-```js
-import { valueString } from 'bam-utility-plugins'
-
-valueString(undefined) // 'undefined'
-valueString(null) // 'null'
-valueString(0) // '0'
-valueString('') //  "''"
-valueString('') //  "''"
-valueString(NaN) // 'NaN'
+console.log(filename2.transformLowerHump())
+// bambooExStrTest
+console.log(filename2.transformSnakeCase())
+// bamboo_Ex_str_Test
+console.log(filename2.data)
+// ['bam', 'boo' 'Ex', 'str', 'Test']
+console.log(filename2.ext)
+// .txt
 ```

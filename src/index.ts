@@ -1,5 +1,5 @@
 export * from './file-name'
-export * from './observable'
+export * from './async'
 export * from './dom'
 export * from './browser'
 export * from './common'

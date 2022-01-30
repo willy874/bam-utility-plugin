@@ -9,22 +9,8 @@ declare class FileName {
     transformSnakeCase(): string;
 }
 
-declare class SubScriber {
-    steps: Array<(data: unknown) => Promise<unknown>>;
-    private err;
-    private end;
-    constructor();
-    getErrorCallback(): ((data: unknown) => Promise<unknown>) | undefined;
-    runCompleteCallback(data: unknown): Promise<unknown>;
-    next(callback: (data: unknown) => Promise<unknown>): void;
-    error(callback: (data: unknown) => Promise<unknown>): void;
-    complete(callback: (data: unknown) => Promise<unknown>): void;
-}
-declare class Observable {
-    subscriber: SubScriber;
-    constructor(init: (callback: SubScriber) => void);
-    run(first: unknown): Promise<unknown>;
-}
+declare type AsyncFunction = (...args: unknown[]) => Promise<unknown>;
+declare function AsyncAction(funcs: AsyncFunction[], initData?: unknown): Promise<unknown>;
 
 /**
  * 清除拖拉顯示元素
@@ -148,4 +134,4 @@ declare class Validator<M> {
     isValid(field: keyof M): boolean;
 }
 
-export { DeviceInfoInfo, FileName, FormDataObject, FormDataValue, HttpError, JsonObject, JsonValue, Observable, SubScriber, TransformStyle, ValidateField, ValidateOption, Validator, ValidatorHandler, ValidatorHandlerOption, ValidatorValidOption, ViewportOffsetResult, blobToBase64, clearDragImage, cloneJson, formDataFormat, formUrlEncodedFormat, getBoundingClientRect, getTransformStyleString, getViewportOffset, handleErrorLog, handleHttpErrorLog, handleWarningLog, isApp, isArrayEmpty, isBlobEmpty, isClass, isDarkMode, isEmpty, isNumberEmpty, isObjectEmpty, isStringEmpty, isTextExcludes, isTextIncludes, messageFormat, transformFileSize, urlToImageElement };
+export { AsyncAction, DeviceInfoInfo, FileName, FormDataObject, FormDataValue, HttpError, JsonObject, JsonValue, TransformStyle, ValidateField, ValidateOption, Validator, ValidatorHandler, ValidatorHandlerOption, ValidatorValidOption, ViewportOffsetResult, blobToBase64, clearDragImage, cloneJson, formDataFormat, formUrlEncodedFormat, getBoundingClientRect, getTransformStyleString, getViewportOffset, handleErrorLog, handleHttpErrorLog, handleWarningLog, isApp, isArrayEmpty, isBlobEmpty, isClass, isDarkMode, isEmpty, isNumberEmpty, isObjectEmpty, isStringEmpty, isTextExcludes, isTextIncludes, messageFormat, transformFileSize, urlToImageElement };

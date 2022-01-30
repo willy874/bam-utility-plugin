@@ -45,60 +45,24 @@ class FileName {
     }
 }
 
-class SubScriber {
-    constructor() {
-        this.steps = [];
-        this.end = async () => {
-            return;
-        };
-    }
-    getErrorCallback() {
-        return this.err;
-    }
-    async runCompleteCallback(data) {
-        return await this.end(data);
-    }
-    next(callback) {
-        this.steps.push(callback);
-    }
-    error(callback) {
-        this.err = callback;
-    }
-    complete(callback) {
-        this.end = callback;
-    }
-}
-class Observable {
-    constructor(init) {
-        this.subscriber = new SubScriber();
-        init(this.subscriber);
-    }
-    run(first) {
-        return new Promise((resolve, reject) => {
-            const steps = this.subscriber.steps;
-            steps.push(async (data) => {
-                const completResult = await this.subscriber.runCompleteCallback(data);
-                resolve(completResult);
-                return completResult;
-            });
-            const errorCallback = this.subscriber.getErrorCallback();
-            const action = (index = 0, data = first) => {
-                if (steps[index]) {
-                    const promise = steps[index](data);
-                    promise
-                        .then((res) => {
-                        action(index + 1, res);
-                    })
-                        .catch((err) => {
-                        if (errorCallback)
-                            errorCallback(err);
-                        reject(err);
-                    });
+function AsyncAction(funcs, initData) {
+    return new Promise((resolve, reject) => {
+        (async function () {
+            let data = initData;
+            for (let index = 0; index < funcs.length; index++) {
+                const func = funcs[index];
+                if (typeof func === 'function') {
+                    try {
+                        data = await func(data);
+                    }
+                    catch (error) {
+                        reject(error);
+                    }
                 }
-            };
-            action();
-        });
-    }
+            }
+            resolve(data);
+        })();
+    });
 }
 
 function conditionData(value, defaultValue) {
@@ -572,4 +536,4 @@ class Validator {
     }
 }
 
-export { FileName, HttpError, Observable, SubScriber, Validator, blobToBase64, clearDragImage, cloneJson, formDataFormat, formUrlEncodedFormat, getBoundingClientRect, getTransformStyleString, getViewportOffset, handleErrorLog, handleHttpErrorLog, handleWarningLog, isApp, isArrayEmpty, isBlobEmpty, isClass, isDarkMode, isEmpty, isNumberEmpty, isObjectEmpty, isStringEmpty, isTextExcludes, isTextIncludes, messageFormat, transformFileSize, urlToImageElement };
+export { AsyncAction, FileName, HttpError, Validator, blobToBase64, clearDragImage, cloneJson, formDataFormat, formUrlEncodedFormat, getBoundingClientRect, getTransformStyleString, getViewportOffset, handleErrorLog, handleHttpErrorLog, handleWarningLog, isApp, isArrayEmpty, isBlobEmpty, isClass, isDarkMode, isEmpty, isNumberEmpty, isObjectEmpty, isStringEmpty, isTextExcludes, isTextIncludes, messageFormat, transformFileSize, urlToImageElement };
