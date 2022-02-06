@@ -12,6 +12,21 @@
 
 處理關於 `名稱` 的字串處理。如果 path-browserify 無法滿足需求的時候，可以搭配該模組來進行大小駝峰的拆解轉換規則。
 
+### Interface
+
+```ts
+class FileName {
+  readonly data: string[]
+  readonly ext: string
+  readonly name: string
+  constructor(name: string)
+  transformUpperHump(): string
+  transformLowerHump(): string
+  transformKebabCase(): string
+  transformSnakeCase(): string
+}
+```
+
 ### Example
 
 ```js
