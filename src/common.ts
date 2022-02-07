@@ -1,11 +1,11 @@
 export interface JsonObject {
-  [k: string]: JsonValue 
+  [k: string]: JsonValue
 }
 
-export type JsonValue = null | boolean | string | number  | JsonObject
+export type JsonValue = null | boolean | string | number | JsonObject
 
 export interface FormDataObject {
-  [k: string]: FormDataValue 
+  [k: string]: FormDataValue
 }
 
 export type FormDataValue = JsonValue | Blob | FormDataObject
@@ -17,7 +17,7 @@ export function formDataFormat(data: FormDataObject): FormData {
       const formName = [...keys, key].map((k, i) => (i ? `[${k}]` : k)).join('')
       if (value instanceof Blob) {
         if (value instanceof File) {
-          formData.append(formName, value , value.name)
+          formData.append(formName, value, value.name)
         } else {
           formData.append(formName, value)
         }
@@ -49,6 +49,10 @@ export function formUrlEncodedFormat(data: JsonObject): URLSearchParams {
   return queryParams
 }
 
- export function cloneJson(obj: unknown): JsonObject {
-  return JSON.parse(JSON.stringify(obj))
+export function cloneJson(obj: unknown): JsonObject | null {
+  try {
+    return JSON.parse(JSON.stringify(obj))
+  } catch (error) {
+    return null
+  }
 }

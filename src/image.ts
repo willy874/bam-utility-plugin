@@ -4,7 +4,7 @@ export function blobToBase64(blob: Blob): Promise<string> {
     reader.onload = (e) => {
       const result = e.target?.result
       if (result instanceof ArrayBuffer) {
-        resolve(JSON.stringify(result)) 
+        resolve(JSON.stringify(result))
       } else {
         resolve(result || '')
       }
@@ -29,6 +29,21 @@ export function urlToImageElement(url: string): Promise<HTMLImageElement> {
     }
     img.src = url
   })
+}
+
+export function imageToBase64(
+  img: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap,
+  type?: string
+): string {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (!canvas || !ctx) {
+    throw new Error('Can‘t draw canvas')
+  }
+  canvas.height = img.height
+  canvas.width = img.width
+  ctx.drawImage(img, 0, 0)
+  return canvas.toDataURL(type || 'image/png')
 }
 
 export function transformFileSize(value: unknown): number {
